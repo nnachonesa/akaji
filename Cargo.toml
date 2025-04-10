@@ -1,0 +1,8 @@
+[package]
+name = "akaji"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dialoguer = "0.11.0"
+rusqlite = "0.34.0"
