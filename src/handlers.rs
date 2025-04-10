@@ -1,5 +1,4 @@
 use crate::db;
-use clearscreen;
 use rusqlite::params;
 
 pub fn add(category: String, amount: f64, reason: String) {
@@ -9,8 +8,6 @@ pub fn add(category: String, amount: f64, reason: String) {
         params![category, amount, reason, "ingreso"],
     )
     .unwrap();
-    println!("categoria {category} monto {amount} razon {reason}");
-    clearscreen::clear().unwrap();
 }
 
 pub fn remove(category: String, amount: f64, reason: String) {
@@ -20,13 +17,11 @@ pub fn remove(category: String, amount: f64, reason: String) {
         params![category, amount, reason, "retiro"],
     )
     .unwrap();
-    clearscreen::clear().unwrap();
 }
 pub fn delete(id: i32) {
     let conn = db::init().unwrap();
     conn.execute("DELETE FROM movimientos WHERE id=?1", params![id])
         .unwrap();
-    clearscreen::clear().unwrap();
 }
 
 pub fn movements() {
@@ -62,5 +57,18 @@ pub fn movements() {
             id, tipo, excl, monto, motivo, fecha
         );
     }
-    println!("MONTO TOTAL: {}", total);
+    println!("MONTO TOTAL: ${}", total);
+}
+
+pub fn options(option: i8) {
+    match option {
+        1 => {
+            // resetear/fixear base de datos
+            let conn = db::init().unwrap();
+            conn.execute("DROP TABLE movimientos", ()).unwrap();
+        }
+        _ => {
+            println!("Opcion no reconocida")
+        }
+    }
 }

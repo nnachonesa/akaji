@@ -1,5 +1,7 @@
 use crate::handlers;
+use crate::utils;
 use dialoguer::{Input, Select};
+use std::process::Command;
 
 pub fn show_menu() {
     let options = vec![
@@ -7,9 +9,11 @@ pub fn show_menu() {
         "Remover Movimiento",
         "Eliminar Movimiento",
         "Mostrar",
+        "Opciones",
         "Salir",
     ];
     loop {
+        utils::cleanconsole();
         let selection = Select::new()
             .with_prompt("Selecciona una opcion")
             .items(&options)
@@ -61,8 +65,22 @@ pub fn show_menu() {
 
                 handlers::delete(id);
             }
-            3 => handlers::movements(),
-            4 => break,
+            3 => {
+                handlers::movements();
+                let _ = Command::new("cmd.exe").arg("/c").arg("pause").status();
+            }
+            4 => {
+                let option: i8 = Input::new()
+                    .with_prompt(
+                        "1. Resetear base de datos.\nIngresa un identificador de opcion valido",
+                    )
+                    .interact_text()
+                    .unwrap();
+
+                handlers::options(option);
+                // opciones
+            }
+            5 => break, // salir
             _ => continue,
         }
     }
