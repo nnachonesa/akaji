@@ -1,4 +1,5 @@
 use crate::db;
+use clearscreen;
 use rusqlite::params;
 
 pub fn add(category: String, amount: f64, reason: String) {
@@ -9,7 +10,7 @@ pub fn add(category: String, amount: f64, reason: String) {
     )
     .unwrap();
     println!("categoria {category} monto {amount} razon {reason}");
-    std::process::Command::new("cls").status().unwrap();
+    clearscreen::clear().unwrap();
 }
 
 pub fn remove(category: String, amount: f64, reason: String) {
@@ -19,10 +20,13 @@ pub fn remove(category: String, amount: f64, reason: String) {
         params![category, amount, reason, "retiro"],
     )
     .unwrap();
-    std::process::Command::new("cls").status().unwrap();
+    clearscreen::clear().unwrap();
 }
 pub fn delete(id: i32) {
     let conn = db::init().unwrap();
+    conn.execute("DELETE FROM movimientos WHERE id=?1", params![id])
+        .unwrap();
+    clearscreen::clear().unwrap();
 }
 
 pub fn movements() {

@@ -5,6 +5,7 @@ pub fn show_menu() {
     let options = vec![
         "Ingresar Movimiento",
         "Remover Movimiento",
+        "Eliminar Movimiento",
         "Mostrar",
         "Salir",
     ];
@@ -52,8 +53,16 @@ pub fn show_menu() {
 
                 handlers::remove(tip.to_string(), monto, motivo.to_string());
             }
-            2 => handlers::movements(),
-            3 => break,
+            2 => {
+                let id: i32 = Input::new()
+                    .with_prompt("Ingresa la id del movimiento a eliminar")
+                    .interact_text()
+                    .unwrap();
+
+                handlers::delete(id);
+            }
+            3 => handlers::movements(),
+            4 => break,
             _ => continue,
         }
     }
